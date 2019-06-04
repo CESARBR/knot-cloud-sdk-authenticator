@@ -69,4 +69,40 @@ describe('Client', () => {
       await expect(client.createUser(user.email, user.password)).rejects.toThrow();
     });
   });
+
+  describe('authenticate user', () => {
+    test('should call post', async () => {
+      const user = { email: 'test@test.com', password: '123qwe!@#QWE' };
+      const resp = { data: { uuid: 'uuid-mocked', token: 'token-mocked' } };
+
+      axios.post.mockResolvedValueOnce(resp);
+
+      await client.authUser(user.email, user.password);
+
+      return expect(axios.post).toBeCalled();
+    });
+
+    test("uri path should be 'http://test:443/auth'", async () => {
+      expect(axios.post).lastCalledWith('http://test:443/auth', { email: 'test@test.com', password: '123qwe!@#QWE' });
+    });
+
+    test('should auth user', async () => {
+      const user = { email: 'test@test.com', password: '123qwe!@#QWE' };
+      const resp = { data: { uuid: 'uuid-mocked', token: 'token-mocked' } };
+
+      axios.post.mockResolvedValueOnce(resp);
+
+      const data = await client.authUser(user.email, user.password);
+
+      return expect(data).toEqual(resp.data);
+    });
+
+    test('should throw error when could not authenticate an user', async () => {
+      const user = { email: 'test@test.com', password: '123qwe!@#QWE' };
+
+      axios.post.mockRejectedValueOnce(new Error('unknown error'));
+
+      await expect(client.authUser(user.email, user.password)).rejects.toThrow();
+    });
+  });
 });

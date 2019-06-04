@@ -96,3 +96,40 @@ main();
 // { id: '863ad780-efd9-4158-b24a-026de3f1dffb'
 //   token: '40ad864d503488eda9b629825876d46cb1356bdf' }
 ```
+
+## authUser(email, password): &lt;Object&gt;
+
+Authenticate a user.
+
+### Arguments
+  * `email` **String** User email.
+  * `password` **String** User password in plain text.
+### Result
+- `user` **Object** JSON object containing user credentials after authentication on cloud.
+
+### Example
+
+```javascript
+const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
+
+const client = new KNoTCloudAuthenticator({
+  protocol: 'https',
+  hostname: 'auth.knot.cloud',
+});
+
+async function main() {
+  try {
+    console.log(await client.authUser('user@provider.com', '123qwe!@#QWE'));
+  } catch (err) {
+    if (err.response) {
+      console.error(err.response.data.message);
+      return;
+    }
+    console.error(err);
+  }
+}
+main();
+
+// { id: '863ad780-efd9-4158-b24a-026de3f1dffb'
+//   token: '40ad864d503488eda9b629825876d46cb1356bdf' }
+```
