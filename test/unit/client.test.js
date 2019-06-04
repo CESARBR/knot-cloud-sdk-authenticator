@@ -105,4 +105,36 @@ describe('Client', () => {
       await expect(client.authUser(user.email, user.password)).rejects.toThrow();
     });
   });
+
+  describe('forgot user', () => {
+    test('should call post', async () => {
+      const user = { email: 'test@test.com' };
+
+      await client.forgotPassword(user.email);
+
+      return expect(axios.post).toBeCalled();
+    });
+
+    test("uri path should be 'http://test:443/forgot'", async () => {
+      expect(axios.post).lastCalledWith('http://test:443/forgot', { email: 'test@test.com' });
+    });
+
+    test('should return undefined', async () => {
+      const user = { email: 'test@test.com' };
+
+      axios.post.mockResolvedValueOnce();
+
+      const data = await client.forgotPassword(user.email);
+
+      return expect(data).toBeUndefined();
+    });
+
+    test('should throw error when internal server error ', async () => {
+      const user = { email: 'test@test.com' };
+
+      axios.post.mockRejectedValueOnce(new Error('unknown error'));
+
+      await expect(client.forgotPassword(user.email)).rejects.toThrow();
+    });
+  });
 });
