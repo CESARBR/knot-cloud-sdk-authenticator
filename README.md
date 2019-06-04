@@ -133,3 +133,35 @@ main();
 // { id: '863ad780-efd9-4158-b24a-026de3f1dffb'
 //   token: '40ad864d503488eda9b629825876d46cb1356bdf' }
 ```
+
+## forgotPassword(email): &lt;Void&gt;
+
+Tells to cloud that a user forgot its password. The cloud then sends an email with a token
+to reset the password.
+
+### Arguments
+* `email` **String** User email.
+
+### Example
+
+```javascript
+const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
+
+const client = new KNoTCloudAuthenticator({
+  protocol: 'https',
+  hostname: 'auth.knot.cloud',
+});
+
+async function main() {
+  try {
+    await client.forgotPassword('user@provider.com');
+  } catch (err) {
+    if (err.response) {
+      console.error(err.response.data.message);
+      return;
+    }
+    console.error(err);
+  }
+}
+main();
+```
