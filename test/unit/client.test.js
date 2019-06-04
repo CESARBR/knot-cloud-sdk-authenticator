@@ -137,4 +137,43 @@ describe('Client', () => {
       await expect(client.forgotPassword(user.email)).rejects.toThrow();
     });
   });
+
+  describe('reset password', () => {
+    test('should call post', async () => {
+      const user = { email: 'test@test.com', password: 'new-password' };
+      const token = 'mocked-token';
+
+      axios.post.mockResolvedValue();
+
+      await client.resetPassword(user.email, token, user.password);
+
+      return expect(axios.post).toBeCalled();
+    });
+
+    test("uri path should be 'http://test:443/reset'", async () => {
+      expect(axios.post).lastCalledWith('http://test:443/reset',
+        { email: 'test@test.com', token: 'mocked-token', password: 'new-password' });
+    });
+
+    test('should return undefined', async () => {
+      const user = { email: 'test@test.com', password: 'new-password' };
+      const token = 'mocked-token';
+
+      axios.post.mockResolvedValueOnce();
+
+      const data = await client.resetPassword(user.email, token, user.password);
+
+      return expect(data).toBeUndefined();
+    });
+
+
+    test('should throw error when internal server error', async () => {
+      const user = { email: 'test@test.com', password: 'new-password' };
+      const token = 'mocked-token';
+
+      axios.post.mockRejectedValueOnce(new Error('unknown error'));
+
+      await expect(client.resetPassword(user.email, token, user.password)).rejects.toThrow();
+    });
+  });
 });
