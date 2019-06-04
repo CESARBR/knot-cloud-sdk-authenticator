@@ -57,4 +57,12 @@ export default class Client {
     const uri = this.buildUri(protocol, hostname, port, `${pathname}/forgot`);
     await axios.post(uri, { email });
   }
+
+  async resetPassword(email, token, password) {
+    const {
+      protocol, hostname, port, pathname,
+    } = this.options;
+    const uri = this.buildUri(protocol, hostname, port, `${pathname}/reset`);
+    await axios.post(uri, { email, token, password });
+  }
 }

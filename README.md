@@ -165,3 +165,38 @@ async function main() {
 }
 main();
 ```
+
+## resetPassword(email, token, newPassword): &lt;Void&gt;
+
+Resets a password from a user.
+
+### Arguments
+* `email` **String** User email.
+* `token` **String** Token sent by email.
+* `newPassword` **String** User password in plain text.
+
+### Example
+
+```javascript
+const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
+
+const client = new KNoTCloudAuthenticator({
+  protocol: 'https',
+  hostname: 'auth.knot.cloud',
+});
+
+async function main() {
+  try {
+    const token = '54ad864d5034887419b629825876d46cb1356b06';
+    const newPassword = 'QWEqwe!@#123';
+    await client.resetPassword('user@provider.com', token, newPassword);
+  } catch (err) {
+    if (err.response) {
+      console.error(err.response.data.message);
+      return;
+    }
+    console.error(err);
+  }
+}
+main();
+```
