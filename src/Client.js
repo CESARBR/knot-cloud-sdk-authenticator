@@ -9,4 +9,9 @@ export default class Client {
     const body = { email, password };
     return this.http.post('users', body);
   }
+
+  async createToken(email, password) {
+    const body = { email, password };
+    return this.http.post('tokens', body);
+  }
 }
