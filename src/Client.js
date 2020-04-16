@@ -40,29 +40,4 @@ export default class Client {
     const response = await axios.post(uri, { email, password });
     return response.data;
   }
-
-  async authUser(email, password) {
-    const {
-      protocol, hostname, port, pathname,
-    } = this.options;
-    const uri = this.buildUri(protocol, hostname, port, `${pathname}/auth`);
-    const response = await axios.post(uri, { email, password });
-    return response.data;
-  }
-
-  async forgotPassword(email) {
-    const {
-      protocol, hostname, port, pathname,
-    } = this.options;
-    const uri = this.buildUri(protocol, hostname, port, `${pathname}/forgot`);
-    await axios.post(uri, { email });
-  }
-
-  async resetPassword(email, token, password) {
-    const {
-      protocol, hostname, port, pathname,
-    } = this.options;
-    const uri = this.buildUri(protocol, hostname, port, `${pathname}/reset`);
-    await axios.post(uri, { email, token, password });
-  }
 }
