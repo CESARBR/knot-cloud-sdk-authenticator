@@ -1,11 +1,14 @@
 import axios from 'axios';
 
 export default class HTTP {
-  constructor({ protocol = 'https', hostname = 'localhost', port = 8180 }) {
+  constructor({
+    protocol = 'https',
+    hostname = 'api.knot.cloud',
+    port = (protocol === 'https') ? 443 : 80,
+  }) {
     if ((protocol !== 'http') && (protocol !== 'https')) {
       throw new Error('Invalid protocol: must be either \'https\' or \'http\'');
     }
-
     if (!hostname) {
       throw new Error('Required field missing: \'hostname\'');
     }
@@ -26,16 +29,26 @@ export default class HTTP {
     };
 
     return axios(config)
-      .then(res => this.handleRet(res))
-      .catch(err => this.handleRet(err));
+      .then(res => Promise.resolve(res.data || JSON.parse(res.config.data)))
+      .catch(err => this.handleError(err));
   }
 
-  async handleRet({ status, response, data }) {
-    switch (status) {
-      case 201:
-        return Promise.resolve(data || status);
-      default:
-        return Promise.reject(Error(`${status || response.data.error} (${status || response.status})`.toLowerCase()));
+  async handleError(r) {
+    if (r.response) {
+      /*
+      * The request was made and the server responded with a
+      * status code that falls out of the range of 2xx
+      */
+      return Promise.reject(Error(`${r.response.data.error} (${r.response.status})`));
+    } if (r.request) {
+      /*
+      * The request was made but no response was received, `error.request`
+      * is an instance of XMLHttpRequest in the browser and an instance
+      * of http.ClientRequest in Node.js
+      */
+      return Promise.reject(Error(`no response was received: ${r.message}`));
     }
+    // Something happened in setting up the request and triggered an Error
+    return Promise.reject(Error(`unexpected error: ${r.message}`));
   }
 }
