@@ -1,202 +1,149 @@
 # knot-cloud-sdk-js-authenticator
 
-KNoT Cloud authenticator service JavaScript library
+KNoT Cloud authenticator service JavaScript library.
 
-# Quickstart
+## Quickstart
 
-## Install
+### Install
 
 ```console
 npm install --save @cesarbr/knot-cloud-sdk-js-authenticator
 ```
 
-## Run
+### Run
 
 `KNoTCloudAuthenticator` connects to &lt;protocol&gt;://&lt;hostname&gt;:&lt;port&gt; using email and password as credentials. Replace this address with your authenticator instance and the credentials with valid ones.
 
 ```javascript
-const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
+const KNoTCloudAuthenticator = require("@cesarbr/knot-cloud-sdk-js-authenticator");
 
 const client = new KNoTCloudAuthenticator({
-  protocol: 'https',
-  hostname: 'auth.knot.cloud',
+  protocol: "https",
+  hostname: "api.knot.cloud",
+  port: 443,
 });
 
 async function main() {
   try {
-    console.log(await client.authUser('user@provider.com', '123qwe!@#QWE'));
+    const user = await client.createUser(
+      "awesome@email.com",
+      "strong-password"
+    );
+    console.log(user);
+    const token = client.createToken("awesome@email.com", "strong-password");
+    console.log(token);
   } catch (err) {
-    if (err.response) {
-      console.error(err.response.data.message);
-      return;
-    }
     console.error(err);
   }
 }
 main();
 ```
 
-# Methods
+## Methods
 
-## constructor(options)
+### Constructor(options)
 
 Create a client object that will connect to a KNoT Cloud protocol authenticator instance.
 
-### Arguments
-- `options` **Object** JSON object with request details.
-  * `protocol` **String** (Optional) Either `'http'` or `'https'`. Default: `'https'`.
-  * `hostname` **String** KNoT Cloud authenticator instance host name.
-  * `port` **Number** (Optional) KNoT Cloud authenticator instance port. Default: 443.
-  * `pathname` **String** (Optional) Path name on the server.
+#### Arguments
 
-### Example
+- `config` **Object** JSON object with request details.
+  - `protocol` **String** (Optional) Either `'http'` or `'https'`. Default: `'https'`.
+  - `hostname` **String** KNoT Cloud authenticator instance hostname. Default `'api.knot.cloud'`.
+  - `port` **Number** (Optional) KNoT Cloud authenticator instance port. Default: 80/443.
+
+#### Example
 
 ```javascript
-const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
+const KNoTCloudAuthenticator = require("@cesarbr/knot-cloud-sdk-js-authenticator");
 
 const client = new KNoTCloudAuthenticator({
-  protocol: 'https',
-  hostname: 'auth.knot.cloud',
+  protocol: "https",
+  hostname: "api.knot.cloud",
+  port: 443,
 });
 ```
 
-## createUser(email, password): &lt;Object&gt;
+### createUser(email, password) &lt;Object&gt;
 
 Creates a new user.
 
-### Arguments
-* `email` **String** User email.
-* `password` **String** User password in plain text.
-### Result
-- `user` **Object** JSON object containing user credentials after creation on cloud.
+#### Arguments
 
-### Example
+- `email` **String** User email.
+- `password` **String** User password in plain text.
+
+#### Result
+
+- `user` **Object** JSON object containing the created user's credentials.
+
+#### Example
 
 ```javascript
-const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
+const KNoTCloudAuthenticator = require("@cesarbr/knot-cloud-sdk-js-authenticator");
 
 const client = new KNoTCloudAuthenticator({
-  protocol: 'https',
-  hostname: 'auth.knot.cloud',
+  protocol: "https",
+  hostname: "api.knot.cloud",
+  port: 443,
 });
 
 async function main() {
   try {
-    console.log(await client.createUser('user@provider.com', '123qwe!@#QWE'));
+    const user = await client.createUser(
+      "awesome@email.com",
+      "strong-password"
+    );
   } catch (err) {
-    if (err.response) {
-      console.error(err.response.data.message);
-      return;
-    }
     console.error(err);
   }
 }
 main();
 
-// { id: '863ad780-efd9-4158-b24a-026de3f1dffb'
-//   token: '40ad864d503488eda9b629825876d46cb1356bdf' }
+// {
+//  email: 'awesome@email.com',
+//  password: 'strong-password',
+// }
 ```
 
-## authUser(email, password): &lt;Object&gt;
+### createToken(email, password): &lt;Object&gt;
 
-Authenticate a user.
+Generates a new access token for the user.
 
-### Arguments
-  * `email` **String** User email.
-  * `password` **String** User password in plain text.
-### Result
-- `user` **Object** JSON object containing user credentials after authentication on cloud.
+#### Arguments
 
-### Example
+- `email` **String** User email.
+- `password` **String** User password, in plain text.
+
+#### Result
+
+- `token` **Object** JSON object containing the user's new access token.
+
+#### Example
 
 ```javascript
-const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
+const KNoTCloudAuthenticator = require("@cesarbr/knot-cloud-sdk-js-authenticator");
 
 const client = new KNoTCloudAuthenticator({
-  protocol: 'https',
-  hostname: 'auth.knot.cloud',
+  protocol: "https",
+  hostname: "api.knot.cloud",
+  port: 443,
 });
 
 async function main() {
   try {
-    console.log(await client.authUser('user@provider.com', '123qwe!@#QWE'));
+    const token = await client.createToken(
+      "awesome@email.com",
+      "strong-password"
+    );
+    console.log(token);
   } catch (err) {
-    if (err.response) {
-      console.error(err.response.data.message);
-      return;
-    }
     console.error(err);
   }
 }
 main();
 
-// { id: '863ad780-efd9-4158-b24a-026de3f1dffb'
-//   token: '40ad864d503488eda9b629825876d46cb1356bdf' }
-```
-
-## forgotPassword(email): &lt;Void&gt;
-
-Tells to cloud that a user forgot its password. The cloud then sends an email with a token
-to reset the password.
-
-### Arguments
-* `email` **String** User email.
-
-### Example
-
-```javascript
-const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
-
-const client = new KNoTCloudAuthenticator({
-  protocol: 'https',
-  hostname: 'auth.knot.cloud',
-});
-
-async function main() {
-  try {
-    await client.forgotPassword('user@provider.com');
-  } catch (err) {
-    if (err.response) {
-      console.error(err.response.data.message);
-      return;
-    }
-    console.error(err);
-  }
-}
-main();
-```
-
-## resetPassword(email, token, newPassword): &lt;Void&gt;
-
-Resets a password from a user.
-
-### Arguments
-* `email` **String** User email.
-* `token` **String** Token sent by email.
-* `newPassword` **String** User password in plain text.
-
-### Example
-
-```javascript
-const KNoTCloudAuthenticator = require('@cesarbr/knot-cloud-sdk-js-authenticator');
-
-const client = new KNoTCloudAuthenticator({
-  protocol: 'https',
-  hostname: 'auth.knot.cloud',
-});
-
-async function main() {
-  try {
-    const token = '54ad864d5034887419b629825876d46cb1356b06';
-    const newPassword = 'QWEqwe!@#123';
-    await client.resetPassword('user@provider.com', token, newPassword);
-  } catch (err) {
-    if (err.response) {
-      console.error(err.response.data.message);
-      return;
-    }
-    console.error(err);
-  }
-}
-main();
+// {
+//  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODcxMjkzNzIsImlhdCI6MTU4NzA5MzM3MiwiaXNzIjoibWFpbmZsdXguYXV0aG4iLCJzdWIiOiJkYWRhdmR2YkBrbm90LmNvbSIsInR5cGUiOjB9._lbRa2fzI_CvEorbEACVAf2UnHvkiCOORY55wCWUGAs'
+// }
 ```
