@@ -34,21 +34,15 @@ export default class HTTP {
   }
 
   async handleError(r) {
-    if (r.response) {
-      /*
-      * The request was made and the server responded with a
-      * status code that falls out of the range of 2xx
-      */
-      return Promise.reject(Error(`${r.response.data.error} (${r.response.status})`));
-    } if (r.request) {
-      /*
-      * The request was made but no response was received, `error.request`
-      * is an instance of XMLHttpRequest in the browser and an instance
-      * of http.ClientRequest in Node.js
-      */
-      return Promise.reject(Error(`no response was received: ${r.message}`));
-    }
-    // Something happened in setting up the request and triggered an Error
-    return Promise.reject(Error(`unexpected error: ${r.message}`));
+    /*
+    * Reject with a detailed error if the response was correctly received.
+    * Otherwise, reject with an unexpected error.
+    */
+    const props = r.response
+      ? { message: r.response.data.message, code: r.response.status }
+      : { message: r.message, code: 500 };
+    const error = Error(props.message);
+    error.code = props.code;
+    return Promise.reject(error);
   }
 }
