@@ -1,3 +1,9 @@
+# [2.0.1](https://github.com/CESARBR/knot-cloud-sdk-js-authenticator/compare/v2.0.0...v2.0.1)
+
+ ### Bug Fixes
+
+- Return status code when handling error.
+
 # [2.0.0](https://github.com/CESARBR/knot-cloud-sdk-js-authenticator/compare/v1.0.0...v2.0.0)
 
  ### Features
