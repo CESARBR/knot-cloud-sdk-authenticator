@@ -1,8 +1,6 @@
-import HTTP from './network/HTTP';
-
 export default class Client {
-  constructor(config) {
-    this.http = new HTTP(config);
+  constructor(http) {
+    this.http = http;
   }
 
   async createUser(email, password) {
