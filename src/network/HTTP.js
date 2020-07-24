@@ -5,6 +5,7 @@ export default class HTTP {
     protocol = 'https',
     hostname = 'api.knot.cloud',
     port = (protocol === 'https') ? 443 : 80,
+    pathname = '',
   }) {
     if ((protocol !== 'http') && (protocol !== 'https')) {
       throw new Error('Invalid protocol: must be either \'https\' or \'http\'');
@@ -13,7 +14,7 @@ export default class HTTP {
       throw new Error('Required field missing: \'hostname\'');
     }
 
-    this.baseUrl = `${protocol}://${hostname}:${port}`;
+    this.baseUrl = `${protocol}://${hostname}:${port}${pathname}`;
     this.header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
