@@ -1,3 +1,9 @@
+# [2.1.1](https://github.com/CESARBR/knot-cloud-sdk-js-authenticator/compare/v2.1.0...v2.1.1)
+
+ ### Bug Fixes
+
+- Add pathname parameter to HTTP component.
+
 # [2.1.0](https://github.com/CESARBR/knot-cloud-sdk-js-authenticator/compare/v2.0.1...v2.1.0)
 
  ### Features

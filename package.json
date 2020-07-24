@@ -1,6 +1,6 @@
 {
 	"name": "@cesarbr/knot-cloud-sdk-js-authenticator",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"description": "KNoT Cloud Authenticator library for NodeJS and browser",
 	"main": "./dist/main.js",
 	"module": "./dist/module.mjs",
