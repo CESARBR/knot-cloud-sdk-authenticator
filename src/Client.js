@@ -20,4 +20,9 @@ export default class Client {
     };
     return this.http.post('tokens', body);
   }
+
+  async createSession(token) {
+    const body = { token };
+    return this.http.post('sessions', body);
+  }
 }

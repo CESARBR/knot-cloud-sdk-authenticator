@@ -147,3 +147,46 @@ main();
 //  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODcxMjkzNzIsImlhdCI6MTU4NzA5MzM3MiwiaXNzIjoibWFpbmZsdXguYXV0aG4iLCJzdWIiOiJkYWRhdmR2YkBrbm90LmNvbSIsInR5cGUiOjB9._lbRa2fzI_CvEorbEACVAf2UnHvkiCOORY55wCWUGAs'
 // }
 ```
+
+### createSession(token): &lt;Object&gt;
+
+Generates a new session ID for the user, which will be used to receive thing's data.
+
+#### Arguments
+
+- `token` **String** User or application token.
+
+#### Result
+
+- `session` **Object** JSON object containing the user's new session ID.
+  - `id` **String** user session ID.
+
+#### Example
+
+```javascript
+const KNoTCloudAuthenticator = require("@cesarbr/knot-cloud-sdk-js-authenticator");
+
+const client = new KNoTCloudAuthenticator({
+  protocol: "https",
+  hostname: "api.knot.cloud",
+  port: 443,
+});
+
+async function main() {
+  try {
+    const { token } = await client.createToken(
+      "awesome@email.com",
+      "strong-password"
+    );
+    const session = await client.createSession(token);
+    console.log(session);
+  } catch (err) {
+    console.error(err);
+  }
+}
+main();
+
+// {
+//   "id": "1t4izjcdHSYxfEZ9DUWMNewtlpR"
+// }
+```
